@@ -69,7 +69,7 @@ export default function HealthTool() {
             )}
             {success && "Submitted successfully!"}
             {view === "health" && (
-                <div id="services">
+                <div id="servicesTool">
                     <h3>Health</h3>
                     <div id="register">
                         <textarea
@@ -188,7 +188,7 @@ export default function HealthTool() {
                 </div>
             )}
             {view === "services" && (
-                <div id="services">
+                <div id="servicesTool">
                     <h3>Services</h3>
                     <div id="register">
                         <textarea

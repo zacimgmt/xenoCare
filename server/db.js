@@ -94,7 +94,7 @@ exports.addServices = (
         urgentTime,
         price,
         pricetable,
-        notes
+        notes,
     ];
     return db.query(
         `INSERT INTO services(name ,
@@ -111,6 +111,16 @@ exports.addServices = (
     urgentTime ,
     price ,
     pricetable ,
-    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) `, params
+    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) `,
+        params
     );
+};
+
+
+exports.getAllHealth = () => {
+    return db.query(`SELECT * FROM health`);
+};
+
+exports.getAllServices = () => {
+    return db.query(`SELECT * FROM services`);
 };

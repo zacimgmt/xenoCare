@@ -48,7 +48,7 @@ app.post("/healthTool", async (req, res) => {
             urgent = "",
             urgentTime = "",
             specialty = "",
-            notes = ""
+            notes = "",
         } = req.body.inputHealth;
 
         const result = await db.addHealth(
@@ -69,10 +69,9 @@ app.post("/healthTool", async (req, res) => {
             notes
         );
         console.log("result: ", result);
-                res.json(true);
-
+        res.json(true);
     } else if (req.body.inputServices) {
-        console.log('req.body: ', req.body);
+        console.log("req.body: ", req.body);
         const {
             name = "",
             type = "",
@@ -88,7 +87,7 @@ app.post("/healthTool", async (req, res) => {
             urgentTime = "",
             price = "",
             pricetable = "",
-            notes = ""
+            notes = "",
         } = req.body.inputServices;
 
         const result = await db.addServices(
@@ -108,11 +107,10 @@ app.post("/healthTool", async (req, res) => {
             pricetable,
             notes
         );
-        console.log('result: ', result);
-        res.json(true)
+        console.log("result: ", result);
+        res.json(true);
     }
 
-   
     {
         // console.log('name: ', name)
         // console.log('email: ', email)
@@ -127,6 +125,14 @@ app.post("/healthTool", async (req, res) => {
         // console.log('urgent: ', urgent)
         // console.log('specialty: ', specialty)}
     }
+});
+
+app.get("/services.json", async (req, res) => {
+    let { rows } = await db.getAllHealth();
+    let { rows: servicesRows } = await db.getAllServices();
+    const allResults = [...rows, ...servicesRows];
+    console.log("allResults: ", allResults);
+    res.json({allResults});
 });
 
 app.get("*", function (req, res) {

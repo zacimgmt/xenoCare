@@ -51,13 +51,13 @@ header {
     *width: 100%;
     border: 1px solid black;
 }
-#services {
+#servicesTool {
     width: 100%;
     display: grid;
     place-items: center;
 }
 
-#services h3 {
+#servicesTool h3 {
     margin: 25px;
 }
 
@@ -97,4 +97,50 @@ header {
     opacity: 1;
     color: whitesmoke;
     text-align: center;
+}
+
+
+#services {
+    margin: 25px;
+    border: 1px solid orange;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 0 200px;
+    font-family: Montserrat;
+}
+
+.service {
+    position: relative;
+    width: 480px;
+    margin: 25px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.644);
+    text-align: central;
+    animation: fade-in-services 1s forwards;
+}
+
+.service h4 { 
+    margin: 10px;
+}
+
+.type { 
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.description {
+    margin: 10px;
+}
+
+@keyframes fade-in-services {
+    0% {
+        opacity: 0;
+        /* transform: scale(0.9); */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
