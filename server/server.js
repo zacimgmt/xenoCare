@@ -40,6 +40,7 @@ app.post("/healthTool", async (req, res) => {
             email = "",
             phone = "",
             url = "",
+            smallbio = "",
             description = "",
             schedule = "",
             insurance = "",
@@ -58,6 +59,7 @@ app.post("/healthTool", async (req, res) => {
             email,
             phone,
             url,
+            smallbio,
             description,
             schedule,
             insurance,
@@ -79,6 +81,7 @@ app.post("/healthTool", async (req, res) => {
             email = "",
             phone,
             url = "",
+            smallbio = "",
             description = "",
             schedule = "",
             english = "",
@@ -97,6 +100,7 @@ app.post("/healthTool", async (req, res) => {
             email,
             phone,
             url,
+            smallbio,
             description,
             schedule,
             english,
@@ -127,12 +131,118 @@ app.post("/healthTool", async (req, res) => {
     }
 });
 
+app.get("/protest", (req, res) => {
+    db.addHealthPro([
+        "Praxis City Ost",
+        "Healthcare",
+        "Gubener Str. 37, 10243 Berlin, Germany",
+        "info@praxiscityost.de",
+        493029363950,
+        "http://www.praxiscityost.de/",
+        "",
+        "",
+        "http://www.praxiscityost.de/sprechstunden.php\n",
+        "",
+        "TRUE",
+        "TRUE",
+        "TRUE",
+        "",
+        "Infectology",
+        "I was able to get PrEP prescribed - no issues",
+    ]);
+});
+
+app.get("/allnames.json", async (req, res) => {
+    const { rows: services } = await db.getAllServicesNames();
+    const { rows: health } = await db.getAllHealthNames();
+    const rawNames = [...services, ...health];
+    const allNames = rawNames.map(({ name }) => name);
+    console.log("allNames: ", allNames);
+    res.json(allNames);
+});
+
 app.get("/services.json", async (req, res) => {
     let { rows } = await db.getAllHealth();
     let { rows: servicesRows } = await db.getAllServices();
     const allResults = [...rows, ...servicesRows];
     console.log("allResults: ", allResults);
-    res.json({allResults});
+    res.json({ allResults });
+});
+
+app.post("/searchServices", async (req, res) => {
+    console.log("req.body: ", req.body);
+    const { inputValue, quality, languages } = req.body;
+
+    if (!inputValue && !quality.length && !languages.length) {
+        let { rows } = await db.getAllHealth();
+        let { rows: servicesRows } = await db.getAllServices();
+        const allResults = [...rows, ...servicesRows];
+        console.log("allResults: ", allResults);
+        return res.json(allResults);
+    }
+
+    let inputQuery = "";
+    if (inputValue) {
+        inputQuery = `name ILIKE '%${inputValue}%'
+        OR description ILIKE '%${inputValue}%'
+        `;
+    }
+
+    const langQuery = languages.reduce((accumulator, tag, index) => {
+        let updatedAcum = accumulator + ` ${tag} = TRUE`;
+        if (index < languages.length - 1) {
+            updatedAcum += "\n AND ";
+        }
+
+        return updatedAcum;
+    }, "");
+    console.log("langQuery: ", langQuery);
+    const qualityQuery = quality.reduce((accumulator, tag, index) => {
+        let updatedAcum = accumulator + ` ${tag} ILIKE 'TRUE'`;
+        if (index < quality.length - 1) {
+            updatedAcum += "\n AND ";
+        }
+
+        return updatedAcum;
+    }, "");
+    console.log("qualityQuery: ", qualityQuery);
+
+    let whereClause;
+    if ((inputValue && quality.length) || languages.length) {
+        whereClause = `WHERE${qualityQuery} AND ${inputQuery};`;
+    } else {
+        whereClause = `WHERE${qualityQuery} ${inputQuery};`;
+    }
+
+    console.log("whereClause: ", whereClause);
+
+    // try{
+
+    const { rows: health } = await db.searchHealthFilter(whereClause);
+    const { rows: services } = await db.searchServicesFilter(whereClause);
+    // }
+    // catch  (err) {
+    //     console.log('err: ', err)
+
+    // }
+    const allResults = [...health, ...services];
+    console.log("allResults: ", allResults);
+    res.json(allResults);
+});
+
+app.get("/servProfile/:type/:id", async (req, res) => {
+    const { type, id } = req.params;
+    if (type === "h") {
+        console.log("type: ", type);
+        let { rows } = await db.getHealthById(id);
+        console.log("rows getHealthById: ", rows);
+        return res.json(rows);
+    } else {
+        let { rows } = await db.getHealthById(id);
+        console.log("rows getHealthById: ", rows);
+        return res.json(rows);
+        console.log("type in server: ", type);
+    }
 });
 
 app.get("*", function (req, res) {

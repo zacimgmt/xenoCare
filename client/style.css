@@ -1,5 +1,7 @@
 * {
     margin: 0;
+    box-sizing: border-box;
+    font-family: Montserrat;
 }
 
 body {
@@ -11,25 +13,92 @@ header {
     align-items: center;
     border-bottom: 1px solid black;
     margin-bottom: 20px;
+    overflow: hidden;
+}
+
+#app-container {
+    margin: 25px;
+}
+
+#app-container label {
+    margin: 7px;
+}
+
+#searchbar {
+    width: 300px;
+    height: 25px;
+}
+
+#searchBarElements {
+    margin: 25px;
+}
+
+#searchHidden {
+    visibility: hidden;
+}
+
+.searchMatch {
+    width: 300px;
+    background-color: white;
+    position: absolute;
+    z-index: 1;
 }
 
 #headerLinks {
     margin: 20px;
     width: 100%;
     margin-right: 15px;
+
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
     transition: all 1s forwards;
 }
 
-.headerLink {
+.headerLink,
+.dropbtn {
+    background-color: transparent;
+    border: none;
     text-decoration: none;
     color: black;
     font-size: 25px;
     font-family: Monaco;
     margin: 0 10px 0 10px;
+}
+
+.dropbtn {
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: ghostwhite;
+   min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    font-size: 20px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    background-color: ghostwhite;
+      text-align: center;
+      font-style: Monaco;
+}
+
+header a:hover, .dropdown:hover .dropbtn {
+  background-color: pink;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .headerLink:hover {
@@ -99,7 +168,6 @@ header {
     text-align: center;
 }
 
-
 #services {
     margin: 25px;
     border: 1px solid orange;
@@ -112,7 +180,8 @@ header {
 
 .service {
     position: relative;
-    width: 480px;
+    width: 460px;
+    min-height: 70px;
     margin: 25px;
     border: 1px solid black;
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.644);
@@ -120,19 +189,63 @@ header {
     animation: fade-in-services 1s forwards;
 }
 
-.service h4 { 
+.service h4 {
     margin: 10px;
 }
 
-.type { 
+.type, .specialty {
     position: absolute;
     top: 5px;
     right: 5px;
 }
 
+.cardLink {
+    position: absolute;
+    bottom: 5px;
+    right: 6px;
+}
+
+.linkToProfile, .contactLink {
+    text-decoration: none;
+    color:rgba(23, 75, 249, 0.982)
+}
+
 .description {
     margin: 10px;
 }
+
+
+#serviceProfileContainer {
+    margin: 25px;
+    
+
+}
+
+.serviceProfile {
+    position: absolute;
+    margin: 0 auto;
+    width: 60%;
+    text-align: center;
+    border: 1px solid rgba(255, 136, 202, 0.817);
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.644)
+}
+
+.serviceProfile * {
+    margin: 10px;
+}
+
+.contactInfo { 
+    text-align: left;
+}
+
+/* #mapid { height: 230px; } */
+
+/* .leaflet-container, .leaflet-touch-drag, .leaflet-touch-zoom{
+   
+    height: 300px;
+} */
+
+
 
 @keyframes fade-in-services {
     0% {

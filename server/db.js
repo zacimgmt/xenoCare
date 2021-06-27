@@ -11,6 +11,7 @@ exports.addHealth = (
     email,
     phone,
     url,
+    smallbio,
     description,
     schedule,
     insurance,
@@ -28,6 +29,7 @@ exports.addHealth = (
         email,
         phone,
         url,
+        smallbio,
         description,
         schedule,
         insurance,
@@ -45,6 +47,7 @@ exports.addHealth = (
     email,
     phone,
     url,
+    smallbio,
     description,
     schedule,
     insurance,
@@ -53,7 +56,7 @@ exports.addHealth = (
     urgent,
     urgentTime,
     specialty, notes)
-         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) `,
+         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16   ) `,
         params
     );
 };
@@ -69,6 +72,7 @@ exports.addServices = (
     email,
     phone,
     url,
+    smallbio,
     description,
     schedule,
     english,
@@ -86,6 +90,7 @@ exports.addServices = (
         email,
         phone,
         url,
+        smallbio,
         description,
         schedule,
         english,
@@ -103,6 +108,7 @@ exports.addServices = (
     email ,
     phone ,
     url ,
+    smallbio,
     description ,
     schedule ,
     english ,
@@ -111,11 +117,10 @@ exports.addServices = (
     urgentTime ,
     price ,
     pricetable ,
-    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) `,
+    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) `,
         params
     );
 };
-
 
 exports.getAllHealth = () => {
     return db.query(`SELECT * FROM health`);
@@ -123,4 +128,48 @@ exports.getAllHealth = () => {
 
 exports.getAllServices = () => {
     return db.query(`SELECT * FROM services`);
+};
+
+exports.getAllServicesNames = () => {
+    return db.query(`SELECT name FROM services`);
+};
+exports.getAllHealthNames = () => {
+    return db.query(`SELECT name FROM health`);
+};
+
+exports.getHealthById = (id) => {
+    return db.query(`SELECT * FROM health WHERE id = $1`, [id]);
+};
+exports.getServiceById = (id) => {
+    return db.query(`SELECT * FROM services WHERE id = $1`, [id]);
+};
+
+exports.addHealthPro = (array) => {
+    return db.query(
+        `INSERT INTO health(name,
+        type,
+        address,
+        email,
+        phone,
+        url,
+        smallbio,
+        description,
+        schedule,
+        insurance,
+        english,
+        queerFriendly,
+        urgent,
+        urgentTime,
+        specialty, notes)
+             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) `,
+        array
+    );
+};
+
+exports.searchHealthFilter = (whereClause) => {
+    return db.query(`SELECT * FROM health ${whereClause}`);
+};
+
+exports.searchServicesFilter = (whereClause) => {
+    return db.query(`SELECT * FROM services ${whereClause}`);
 };

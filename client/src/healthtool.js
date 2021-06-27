@@ -115,6 +115,13 @@ export default function HealthTool() {
                         ></textarea>{" "}
                         <p></p>
                         <textarea
+                            name="smallbio"
+                            placeholder="smallbio"
+                            type="text"
+                            onChange={(e) => handleChangeHealth(e)}
+                        ></textarea>{" "}
+                        <p></p>
+                        <textarea
                             name="description"
                             placeholder="description"
                             type="text"
@@ -231,6 +238,13 @@ export default function HealthTool() {
                             placeholder="url"
                             type="text"
                             onChange={(e) => handleChangeServices(e)}
+                        ></textarea>{" "}
+                        <p></p>
+                        <textarea
+                            name="smallbio"
+                            placeholder="smallbio"
+                            type="text"
+                            onChange={(e) => handleChangeHealth(e)}
                         ></textarea>{" "}
                         <p></p>
                         <textarea
