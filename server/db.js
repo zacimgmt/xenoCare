@@ -14,8 +14,9 @@ exports.addHealth = (
     smallbio,
     description,
     schedule,
-    insurance,
+    price,
     english,
+    languages,
     queerFriendly,
     urgent,
     urgentTime,
@@ -32,8 +33,9 @@ exports.addHealth = (
         smallbio,
         description,
         schedule,
-        insurance,
+        price,
         english,
+        languages,
         queerFriendly,
         urgent,
         urgentTime,
@@ -50,16 +52,19 @@ exports.addHealth = (
     smallbio,
     description,
     schedule,
-    insurance,
+    price,
     english,
+    languages,
     queerFriendly,
     urgent,
     urgentTime,
     specialty, notes)
-         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16   ) `,
+         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17   ) `,
         params
     );
 };
+
+
 
 exports.get = () => {
     return db.query(`SELECT * FROM health`);
@@ -76,6 +81,7 @@ exports.addServices = (
     description,
     schedule,
     english,
+    languages,
     queerFriendly,
     urgent,
     urgentTime,
@@ -94,6 +100,7 @@ exports.addServices = (
         description,
         schedule,
         english,
+        languages,
         queerFriendly,
         urgent,
         urgentTime,
@@ -111,13 +118,14 @@ exports.addServices = (
     smallbio,
     description ,
     schedule ,
-    english ,
+    english 
+    languages,,
     queerFriendly ,
     urgent ,
     urgentTime ,
     price ,
     pricetable ,
-    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) `,
+    notes) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) `,
         params
     );
 };
@@ -149,19 +157,22 @@ exports.addHealthPro = (array) => {
         `INSERT INTO health(name,
         type,
         address,
+        lat,
+        long,
         email,
         phone,
         url,
         smallbio,
         description,
         schedule,
-        insurance,
+        price,
         english,
+        languages,
         queerFriendly,
         urgent,
         urgentTime,
         specialty, notes)
-             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) `,
+             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) `,
         array
     );
 };
@@ -173,3 +184,8 @@ exports.searchHealthFilter = (whereClause) => {
 exports.searchServicesFilter = (whereClause) => {
     return db.query(`SELECT * FROM services ${whereClause}`);
 };
+
+
+exports.testing = () => {
+    return db.query(`SELECT * FROM health WHERE description ILIKE '%turkish%' OR description ILIKE '%drug%';`);
+}
