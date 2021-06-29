@@ -30,7 +30,7 @@ export default function serviceProfile(props) {
         return <h1>No service found, sorry!</h1>;
     }
 
-    if (!service ) {
+    if (!service) {
         return null;
     }
 
@@ -49,28 +49,31 @@ export default function serviceProfile(props) {
         english = "",
         queerfriendly = "",
         urgent = "",
-        urgenttime,
+        urgenttime = "",
         price = "",
         pricetable = "",
         specialty = "",
         notes = "",
     } = service;
     console.log("urgentTime: ", urgenttime);
+    
     const position = [lat, long];
     return (
         <>
             <div id="serviceProfileContainer">
+                <Link id='goBack' to='/services'>Go Back  </Link>
                 <div className="serviceProfile">
                     <div id="notMap">
                         <h2>{name}</h2>
                         {specialty && (
                             <span className="specialty"> {specialty} </span>
                         )}
-                        <p>{description}</p>
+                        <span>{description}</span>
                         {schedule && (
-                            <details>
+                            <details id='serviceSchedule'>
                                 <summary>Schedule</summary>
-                                <p>{schedule}</p>
+                                {schedule.startsWith('http') && <p><a href={schedule}>Info available on their website</a></p>}
+                                {!schedule.startsWith('http') && <p>{schedule}</p>}
                             </details>
                         )}
                         {insurance && insurance !== "not required" && (
@@ -78,18 +81,24 @@ export default function serviceProfile(props) {
                         )}
                         {insurance === "not required" && <p>Free</p>}
                         <div className="profileAttributes">
-                            {english && <p>English Speaking</p>}
-                            {queerfriendly && <p>Queer Friendly</p>}
-                            {urgent && (
-                                <div>
-                                    <p>Take urgent appointments</p>
-                                    {urgenttime && (
-                                        <>
-                                            <h3> Schedule</h3>
-                                            <p> {urgenttime}</p>
-                                        </>
-                                    )}
+                            {english && (
+                                <span className="label">English Speaking</span>
+                            )}
+                            {queerfriendly && (
+                                <span className="label">Queer Friendly</span>
+                            )}
+                            {urgent && urgenttime && (
+                                <div id='urgent-container'>
+                                    <details id='urgentSchedule'>
+                                        <summary className="label">
+                                            Takes urgent appointments
+                                        </summary>
+                                        <p id='urgenttime'> {urgenttime}</p>
+                                    </details>
                                 </div>
+                            )}
+                            {urgent && !urgenttime && (
+                                <span className='label'>Takes Urgent Appointments</span>
                             )}
                         </div>
 
@@ -128,7 +137,7 @@ export default function serviceProfile(props) {
                     <div className="servicesMap" style={{ margin: 0 }}>
                         <MapContainer
                             center={[lat, long]}
-                            zoom={10}
+                            zoom={11}
                             scrollWheelZoom={true}
                             style={{ height: 200, margin: 0 }}
                         >
@@ -157,9 +166,7 @@ export default function serviceProfile(props) {
                                         <br />
                                         {address}
                                         <br />
-                                      
                                     </div>
-                                    
                                 </Popup>
                             </Marker>
                         </MapContainer>

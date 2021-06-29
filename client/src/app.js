@@ -40,26 +40,26 @@ export default function App() {
                             <div className="dropdown">
                                 <button className="dropbtn">
                                     Services
-                                    <i className="fa fa-caret-down"></i>
+                                    
                                 </button>
                                 <div className="dropdown-content">
                                     <Link to="/services">General</Link>
-                                    <Link to="/services#health">
+                                    <Link to="/services#healthcare">
                                         Healthcare
                                     </Link>
-                                    <Link to="#">
+                                    <Link to="/services/#jobcenter">
                                         Jobcenter / <br></br>Tax / Legal Help
                                     </Link>
                                 </div>
                             </div>
                         </div>
-                        <Link className="headerLink" to="/services"></Link>
+                        
                         <a className="headerLink" href="/form">
                             Form
                         </a>
-                        <Link className="headerLink" to="/about">
+                        {/* <Link className="headerLink" to="/about">
                             About
-                        </Link>
+                        </Link> */}
                         <Link className="headerLink" to="/healthtool">
                             Tool
                         </Link>

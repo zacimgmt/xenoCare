@@ -4,13 +4,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Link } from "react-router-dom";
 
 export default function Services(props) {
-    console.log("props.match: ", props.location.hash);
+    const locationHash = props.location.hash;
     const [services, setServices] = useState("");
     const [servicesNames, setServicesNames] = useState("");
     const [allNames, setallNames] = useState([]);
     const [matchedNames, setMatchedNames] = useState([]);
     const [languageLabels, setLanguageLabels] = useState([]);
     const [qualityLabels, setQualityLabels] = useState([]);
+    const [searchMode, setSearchMode] = useState("AND");
     const [inputValue, setInputValue] = useState("");
     const [searchClass, setSearchClass] = useState("");
     const [viewMode, setViewMode] = useState("search");
@@ -38,13 +39,14 @@ export default function Services(props) {
             languages: [...languageLabels],
             quality: [...qualityLabels],
             inputValue,
+            searchMode,
         };
         console.log("search: ", search);
         const { data } = await axios.post("/searchServices", search);
         console.log("data: ", data);
         setServices(data);
         console.log("quality label changed: ", qualityLabels);
-    }, [qualityLabels, languageLabels]);
+    }, [qualityLabels, languageLabels, searchMode]);
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
@@ -96,6 +98,10 @@ export default function Services(props) {
             );
         }
     };
+    const handleModeLabel = (e) => {
+        console.log("e.target.name: ", e.target.value);
+        setSearchMode(e.target.value);
+    };
 
     const handleSubmit = async (e) => {
         const search = {
@@ -112,10 +118,13 @@ export default function Services(props) {
     if (!services) {
         return null;
     }
-
+    console.log('locationHash: ', locationHash)
     return (
         <div id="app-container">
             <div id="searchBarElements">
+                {!locationHash && <h1>General Services</h1>}
+                {locationHash == '#healthcare' && <h1>Healthcare Services</h1>}
+                {locationHash == '#jobcenter' && <h1>Jobcenter, Tax and Legal Help</h1>}
                 <button
                     id="seeMap"
                     onClick={() => {
@@ -183,6 +192,15 @@ export default function Services(props) {
                     <details id="filters">
                         <summary id="summaryOfFilters">Filters</summary>
                         {/* <span> */}
+                        <h4>Search Mode</h4>
+                        <select id="mode" onChange={(e) => handleModeLabel(e)}>
+                            <option value="AND" checked>
+                                Exclusive
+                            </option>
+
+                            <option value="OR">Accumulative</option>
+                        </select>
+
                         <h4>Languages</h4>
                         <input
                             type="checkbox"
@@ -299,6 +317,7 @@ export default function Services(props) {
 
             {viewMode === "search" && (
                 <div id="services">
+                    {}
                     {services
                         .sort((a, b) => (a.name > b.name ? 1 : -1))
                         .map(
@@ -316,9 +335,9 @@ export default function Services(props) {
                                     schedule = "",
                                     insurance = "",
                                     english = "",
-                                    queerFriendly = "",
+                                    queerfriendly = "",
                                     urgent = "",
-                                    urgentTime = "",
+                                    urgenttime = "",
                                     price = "",
                                     pricetable = "",
                                     specialty = "",
@@ -326,6 +345,14 @@ export default function Services(props) {
                                 },
                                 index
                             ) => {
+                                if (props.location.hash) {
+                                    if (
+                                        props.location.hash !==
+                                        `#${type.toLowerCase()}`
+                                    ) {
+                                        return;
+                                    }
+                                }
                                 let link;
                                 if (type === "Healthcare") {
                                     link = `/serviceProfile/h/${id}`;
@@ -348,9 +375,27 @@ export default function Services(props) {
                                         {description && (
                                             <details className="description">
                                                 <summary>Description</summary>
-                                                {description}
+                                                <p>{description}</p>
                                             </details>
                                         )}
+                                        <div className="servicesAttributes">
+                                            {english && (
+                                                <span className="label">
+                                                    English Speaking
+                                                </span>
+                                            )}
+                                            {queerfriendly && (
+                                                <span className="label">
+                                                    Queer Friendly
+                                                </span>
+                                            )}
+
+                                            {urgent && (
+                                                <span className="label">
+                                                    Takes Urgent Appointments
+                                                </span>
+                                            )}
+                                        </div>
                                         {/* <div>
                                 <p> {name},</p>
                                 <p> {type},</p>

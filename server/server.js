@@ -42,14 +42,17 @@ app.post("/healthTool", async (req, res) => {
             name = "",
             type = "",
             address = "",
+            lat = 0,
+            long = 0,
             email = "",
             phone = "",
             url = "",
             smallbio = "",
             description = "",
             schedule = "",
-            insurance = "",
+            price = "",
             english = "",
+            languages,
             queerFriendly = "",
             urgent = "",
             urgentTime = "",
@@ -61,14 +64,17 @@ app.post("/healthTool", async (req, res) => {
             name,
             type,
             address,
+            lat,
+            long,
             email,
             phone,
             url,
             smallbio,
             description,
             schedule,
-            insurance,
+            price,
             english,
+            languages,
             queerFriendly,
             urgent,
             urgentTime,
@@ -293,41 +299,51 @@ app.get("/services.json", async (req, res) => {
 
 app.post("/searchServices", async (req, res) => {
     console.log("req.body: ", req.body);
-    const { inputValue, quality, languages } = req.body;
+    const { inputValue, quality, languages, searchMode } = req.body;
 
     if (!inputValue && !quality.length && !languages.length) {
         let { rows } = await db.getAllHealth();
         let { rows: servicesRows } = await db.getAllServices();
         const allResults = [...rows, ...servicesRows];
-        console.log("allResults: ", allResults);
+        // console.log("allResults: ", allResults);
         return res.json(allResults);
     }
 
+    let count = 0;
+    let params = [];
     let inputQuery = "";
     if (inputValue) {
-        inputQuery = ` name ILIKE '${inputValue}%'
-        OR description ILIKE '%${inputValue}%'
+        inputQuery = `( name ILIKE $${++count}
+        OR description ILIKE $${count})
         `;
+        params.push(`%${inputValue}%`);
     }
 
     const langQuery = languages.reduce((accumulator, tag, index) => {
-        let updatedAcum = accumulator + ` languages ILIKE '%${tag}%'`;
+        let updatedAcum = accumulator + ` languages ILIKE $${++count}`;
+         params.push(`%${tag}%`);
         if (index < languages.length - 1) {
             updatedAcum += "\n OR ";
+        } else {
+            updatedAcum += ")";
         }
 
         return updatedAcum;
-    }, "");
+    }, "(");
     console.log("langQuery: ", langQuery);
     const qualityQuery = quality.reduce((accumulator, tag, index) => {
         let updatedAcum = accumulator + ` ${tag} ILIKE 'TRUE'`;
+        // params.push(tag);
         if (index < quality.length - 1) {
-            updatedAcum += "\n AND ";
+            updatedAcum += `\n ${searchMode}`;
+        } else {
+            updatedAcum += "\n )";
         }
 
         return updatedAcum;
-    }, "");
+    }, "(");
     console.log("qualityQuery: ", qualityQuery);
+    console.log('params: ', params)
 
     let whereClause;
     if (inputValue) {
@@ -351,26 +367,26 @@ app.post("/searchServices", async (req, res) => {
             whereClause = `WHERE ${qualityQuery};`;
             console.log("whereClause: ", whereClause);
         } else if (languages.length) {
-            console.log('languages')
+            console.log("languages");
             whereClause = `WHERE ${langQuery};`;
             console.log("whereClause: ", whereClause);
         }
-        
     }
 
     console.log("whereClause: ", whereClause);
+    console.log('params: ', params)
 
     // try{
 
-    const { rows: health } = await db.searchHealthFilter(whereClause);
-    const { rows: services } = await db.searchServicesFilter(whereClause);
+    const { rows: health } = await db.searchHealthFilter(whereClause, params);
+    const { rows: services } = await db.searchServicesFilter(whereClause, params);
     // }
     // catch  (err) {
     //     console.log('err: ', err)
 
     // }
     const allResults = [...health, ...services];
-    console.log("allResults: ", allResults);
+    // console.log("allResults: ", allResults);
     res.json(allResults);
 });
 

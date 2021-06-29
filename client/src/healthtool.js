@@ -94,6 +94,20 @@ export default function HealthTool() {
                         ></textarea>
                         <p></p>
                         <textarea
+                            name="lat"
+                            placeholder="latitude"
+                            type="text"
+                            onChange={(e) => handleChangeHealth(e)}
+                        ></textarea>
+                        <p></p>
+                        <textarea
+                            name="long"
+                            placeholder="longitude"
+                            type="text"
+                            onChange={(e) => handleChangeHealth(e)}
+                        ></textarea>
+                        <p></p>
+                        <textarea
                             name="email"
                             placeholder="email"
                             type="email"
