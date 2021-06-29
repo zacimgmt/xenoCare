@@ -1,3 +1,11 @@
 {
-    "header": "hello"
+    "header": "A crowdsourced directory of services in Berlin",
+    "landing_1": "Navigating the German bureaucratic system and accessing the services you need can make living in Berlin hard if you don’t speak the language, especially if you aren’t documented, are LGBTQIA+, or don’t have enough money to hire help.",
+    "landing_2": " There are lots of services available in Berlin, but finding these is usually not very easy. We aim to collect a big range of these services and make them accessible to those who are in need.",
+    "landing_3": " We’ve created an accessible directory to help you out. With a search engine that uses filters and keywords, we hope you can easily access what you’re looking for.",
+    "landing_4": " Our crowdsourced directory relies on the community to submit services that it think should be shared with others. Thank you for your support.",
+    "find": "Find more info about our mission",
+    "submit": "Submit a service",
+
+    "here": "here"
 }
