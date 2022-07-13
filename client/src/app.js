@@ -49,9 +49,9 @@ export default function App() {
                             </div>
                         </div>
                         
-                        <a className="headerLink" href="/form">
+                        <Link className="headerLink" href="/form">
                             Form
-                        </a>
+                        </Link>
                         <Link className="headerLink" to="/healthtool">
                             Tool
                         </Link>
