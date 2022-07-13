@@ -62,9 +62,9 @@ export default function HealthTool() {
         <>
             {view && (
                 <div id="toolButtons">
-                    <button onClick={viewHealth}>Health Tool</button>
+                    <button onClick={viewHealth} onMouseUp>Health Tool</button>
                     <button onClick={viewServices}>Services Tool</button>
-                    <button onClick={cleaninput}>lol</button>
+                 
                 </div>
             )}
             {success && "Submitted successfully!"}

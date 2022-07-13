@@ -24,8 +24,16 @@ export default function LandingPage() {
                     <p>{t("landing_4")}</p>
                     <br></br>
                     <p>
-                        {t("find")} <Link to="/about">{t("here")}</Link>. <br />{" "}
-                        {t('submit')}<a href="/form">{t("here")}</a>.
+                        {t("find")}{" "}
+                        <Link id="landingLink" to="/about">
+                            {t("here")}
+                        </Link>
+                        . <br /> {t("submit")}{" "}
+                        <a id="landingLink" href="/form">
+                            {" "}
+                            {t("here")}
+                        </a>
+                        .
                     </p>
                 </div>
             </div>

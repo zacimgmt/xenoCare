@@ -118,13 +118,15 @@ export default function Services(props) {
     if (!services) {
         return null;
     }
-    console.log('locationHash: ', locationHash)
+    console.log("locationHash: ", locationHash);
     return (
         <div id="app-container">
             <div id="searchBarElements">
                 {!locationHash && <h1>General Services</h1>}
-                {locationHash == '#healthcare' && <h1>Healthcare Services</h1>}
-                {locationHash == '#jobcenter' && <h1>Jobcenter, Tax and Legal Help</h1>}
+                {locationHash == "#healthcare" && <h1>Healthcare Services</h1>}
+                {locationHash == "#jobcenter" && (
+                    <h1>Jobcenter, Tax and Legal Help</h1>
+                )}
                 <button
                     id="seeMap"
                     onClick={() => {
@@ -373,10 +375,14 @@ export default function Services(props) {
                                         </span>
                                         <h4>{name}</h4>
                                         {description && (
-                                            <details className="description">
-                                                <summary>Description</summary>
-                                                <p>{description}</p>
-                                            </details>
+                                            <div id="description-container">
+                                                <details className="description">
+                                                    <summary>
+                                                        Description
+                                                    </summary>
+                                                    <p>{description}</p>
+                                                </details>
+                                            </div>
                                         )}
                                         <div className="servicesAttributes">
                                             {english && (
@@ -426,7 +432,7 @@ export default function Services(props) {
                 <div className="servicesMap">
                     <MapContainer
                         center={berlinPosition}
-                        zoom={11}
+                        zoom={12}
                         scrollWheelZoom={false}
                         id="mapid"
                     >
@@ -436,6 +442,14 @@ export default function Services(props) {
                         />
                         {services.map(
                             ({ lat, long, name, type, id, address }, index) => {
+                                if (props.location.hash) {
+                                    if (
+                                        props.location.hash !==
+                                          `#${type.toLowerCase()}`
+                                    ) {
+                                        return;
+                                    }
+                                }
                                 let link;
                                 if (type === "Healthcare") {
                                     link = `/serviceProfile/h/${id}`;

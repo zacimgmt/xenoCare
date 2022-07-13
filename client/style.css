@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: ghostwhite;
+   background-color: #ff78b9;
 }
 
 header {
@@ -16,15 +16,18 @@ header {
     border-bottom: 1px solid black;
     /* margin-bottom: 20px; */
     overflow: hidden;
+
 }
 
 #logo {
     text-decoration: none;
     color: black;
+    transition: all .5s ease;
 }
 
 #logo:hover{
     background-color: none;
+    transform: scale(1.04);
 }
 
 #landing-container {
@@ -50,8 +53,23 @@ header {
     margin: 0 auto;
 }
 
+#landing h1 {
+   font-size: 42px;
+}
+
+
 #landing p {
-    font-size: 18px;
+    font-size: 21px;
+}
+
+#landingLink {
+    text-decoration: none;
+    color: whitesmoke;
+    text-shadow: .5px .5px  black;
+}
+
+#form {
+    margin: 25px;
 }
 
 #normal {
@@ -78,6 +96,7 @@ header {
     
     position: relative;
     margin: 25px;
+    overflow-y: auto;
 }
 
 #app-container label {
@@ -99,7 +118,7 @@ header {
 }
 
 #searchBarElements h1 {
-     color: rgb(252, 0, 0);
+     color: whitesmoke;
      text-shadow: .5px .5px .5px  rgba(0, 0, 0, 1);
 }
 #searchBarElements * {
@@ -200,10 +219,12 @@ header {
     margin: 0;
 }
 
-header a:hover,
+header #headerLinks a:hover,
 .dropdown:hover .dropbtn {
-    background-color: pink;
+    background-color: rgb(223, 39, 94);
 }
+
+
 
 .dropdown:hover .dropdown-content {
     display: block;
@@ -220,14 +241,6 @@ header a:hover,
     font-family: Monaco;
 }
 
-#form {
-    overflow: scroll;
-    position: relative;
-    width: 1px;
-    min-width: 100%;
-    *width: 100%;
-    border: 1px solid black;
-}
 #servicesTool {
     width: 100%;
     display: grid;
@@ -241,7 +254,14 @@ header a:hover,
 #toolButtons {
     width: 50%;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    margin: 25px;
+}
+
+#toolButtons button {
+    margin: 25px;
+    background: rgba(248, 248, 255, 0.616);
+    font-size: 22px;
 }
 
 #register {
@@ -285,6 +305,7 @@ header a:hover,
     justify-content: center;
     flex: 1 1 200px;
     font-family: Montserrat;
+    min-height: 300px;
 }
 
 
@@ -459,6 +480,11 @@ summary {
     text-align: center;
 }
 
+
+#toolButtons {
+    margin: 25px;
+
+}
 /* .leaflet-container, .leaflet-touch-drag, .leaflet-touch-zoom{
    
     height: 300px;

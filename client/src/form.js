@@ -1,6 +1,6 @@
 export default function Form() {
     return (
-        <div>
+        <div id='form'>
            
             <div className="cognito"></div>
         </div>

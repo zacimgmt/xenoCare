@@ -31,6 +31,15 @@ const auth = function (req, res, next) {
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
+if (process.env.NODE_ENV == "production") {
+    app.use((req, res, next) => {
+        if (req.headers["x-forwarded-proto"].startsWith("https")) {
+            return next();
+        }
+        res.redirect(`https://${req.hostname}${req.url}`);
+    });
+}
+
 app.get("/test", auth, (req, res) => {
     res.json(true);
 });
@@ -142,7 +151,7 @@ app.post("/healthTool", async (req, res) => {
     }
 });
 
-app.get("/protest", async (req, res) => {
+app.get("/prohealth", async (req, res) => {
     const data = [
         [
             "Praxis City Ost",
@@ -280,10 +289,44 @@ app.get("/protest", async (req, res) => {
     });
 });
 
+app.get("/proservices", async (req, res) => {
+    const data = [
+        [
+            "AWO Frauenberatung\n",
+            "Jobcenter",
+            "Sonnenallee 200, 12059 Berlin",
+            52.47501,
+            13.45311,
+            "merle-amelung@awo-suedost.de",
+            49306139630,
+            '',
+            "The AWO Südost website offers a wide range of information that is regularly updated. Liability for topicality, completeness or quality is excluded. All free and other offers are non-binding. The editors reserve the right to change, add to, or delete the offers or to cease publication.",
+            '',
+            '',
+            "TRUE",
+            '',
+            '',
+            "TRUE",
+            '',
+            "TRUE",
+            '',
+            "Merle is the best- super lovely patient and helpful with these complicated Jobcenter applications",
+        ],
+    ];
+    data.map(async (each) => {
+        db.addServicesPro(each).catch((err) => {
+            console.log("err: ", err);
+            res.json(err);
+        });
+        // console.log("result: ", result);
+    });
+});
+
 app.get("/allnames.json", async (req, res) => {
     const { rows: services } = await db.getAllServicesNames();
     const { rows: health } = await db.getAllHealthNames();
     const rawNames = [...services, ...health];
+    console.log('rawNames: ', rawNames)
     const allNames = rawNames.map(({ name }) => name);
     console.log("allNames: ", allNames);
     res.json(allNames);
@@ -321,7 +364,7 @@ app.post("/searchServices", async (req, res) => {
 
     const langQuery = languages.reduce((accumulator, tag, index) => {
         let updatedAcum = accumulator + ` languages ILIKE $${++count}`;
-         params.push(`%${tag}%`);
+        params.push(`%${tag}%`);
         if (index < languages.length - 1) {
             updatedAcum += "\n OR ";
         } else {
@@ -343,7 +386,7 @@ app.post("/searchServices", async (req, res) => {
         return updatedAcum;
     }, "(");
     console.log("qualityQuery: ", qualityQuery);
-    console.log('params: ', params)
+    console.log("params: ", params);
 
     let whereClause;
     if (inputValue) {
@@ -374,12 +417,15 @@ app.post("/searchServices", async (req, res) => {
     }
 
     console.log("whereClause: ", whereClause);
-    console.log('params: ', params)
+    console.log("params: ", params);
 
     // try{
 
     const { rows: health } = await db.searchHealthFilter(whereClause, params);
-    const { rows: services } = await db.searchServicesFilter(whereClause, params);
+    const { rows: services } = await db.searchServicesFilter(
+        whereClause,
+        params
+    );
     // }
     // catch  (err) {
     //     console.log('err: ', err)
@@ -398,12 +444,13 @@ app.get("/servProfile/:type/:id", async (req, res) => {
         console.log("rows getHealthById: ", rows);
         return res.json(rows);
     } else {
-        let { rows } = await db.getHealthById(id);
+        console.log("type in server: ", type);
+        let { rows } = await db.getServiceById(id);
         console.log("rows getHealthById: ", rows);
         return res.json(rows);
-        console.log("type in server: ", type);
     }
 });
+
 
 app.get("/lang", async (req, res) => {
     const { rows } = await db.testing();
