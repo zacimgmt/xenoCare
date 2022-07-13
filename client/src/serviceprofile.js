@@ -17,12 +17,10 @@ import { Link } from "react-router-dom";
 
 export default function serviceProfile(props) {
     const [service, setService] = useState();
-    console.log("props: ", props.match.params);
     const { type, id } = props.match.params;
 
     useEffect(async () => {
         const { data } = await axios.get(`/servProfile/${type}/${id}`);
-        console.log("service: ", data[0]);
         setService(data[0] || null);
     }, []);
 
@@ -55,7 +53,6 @@ export default function serviceProfile(props) {
         specialty = "",
         notes = "",
     } = service;
-    console.log("urgentTime: ", urgenttime);
     
     const position = [lat, long];
     return (

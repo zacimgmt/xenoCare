@@ -28,10 +28,7 @@ export default function Services(props) {
         setallNames(allNames);
     }, [props.location.hash]);
 
-    // useEffect(async () => {
-    //     console.log("language label changed: ", languageLabels);
-    // }, [languageLabels]);
-
+  
     useEffect(async () => {
         const search = {
             languages: [...languageLabels],
@@ -39,16 +36,13 @@ export default function Services(props) {
             inputValue,
             searchMode,
         };
-        console.log("search: ", search);
+      
         const { data } = await axios.post("/searchServices", search);
-        console.log("data: ", data);
         setServices(data);
-        console.log("quality label changed: ", qualityLabels);
     }, [qualityLabels, languageLabels, searchMode]);
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
-        console.log("e.target.value: ", e.target.value);
         const input = e.target.value.toLowerCase();
         if (e.target.value === "") {
             return setMatchedNames([]);
@@ -56,25 +50,20 @@ export default function Services(props) {
         let matchedServices = allNames.filter((each) => {
             const eachLowerCase = each.toLowerCase();
             if (eachLowerCase.indexOf(input) === 0) {
-                console.log("each: ", each);
                 return each;
             }
             return;
         });
-        console.log("matchedServices: ", matchedServices);
         setMatchedNames(matchedServices);
     };
 
     const handleQualityLabel = (e) => {
-        console.log("e: ", e.target.checked);
         const { checked } = e.target;
-        console.log("e.target.name: ", e.target.name);
         if (checked) {
             if (!qualityLabels.some((each) => each === e.target.name)) {
                 setQualityLabels([...qualityLabels, e.target.name]);
             }
         } else if (!checked) {
-            console.log("notchecked");
             setQualityLabels(
                 qualityLabels.filter((each) => each !== e.target.name)
             );
@@ -82,22 +71,18 @@ export default function Services(props) {
     };
 
     const handleLanguageLabel = (e) => {
-        console.log("e: ", e.target.checked);
         const { checked } = e.target;
-        console.log("e.target.name: ", e.target.name);
         if (checked) {
             if (!languageLabels.some((each) => each === e.target.name)) {
                 setLanguageLabels([...languageLabels, e.target.name]);
             }
         } else if (!checked) {
-            console.log("notchecked");
             setLanguageLabels(
                 languageLabels.filter((each) => each !== e.target.name)
             );
         }
     };
     const handleModeLabel = (e) => {
-        console.log("e.target.name: ", e.target.value);
         setSearchMode(e.target.value);
     };
 
@@ -107,16 +92,13 @@ export default function Services(props) {
             quality: [...qualityLabels],
             inputValue,
         };
-        console.log("search: ", search);
         const { data } = await axios.post("/searchServices", search);
-        console.log("data: ", data);
         setServices(data);
     };
 
     if (!services) {
         return null;
     }
-    console.log("locationHash: ", locationHash);
     return (
         <div id="app-container">
             <div id="searchBarElements">
@@ -142,13 +124,10 @@ export default function Services(props) {
                 <div
                     tabIndex="0"
                     style={{ margin: 0 }}
-                    // onBlur={() => {
-                    //     setSearchClass("searchHidden");
-                    // }}
+                   
                 >
                     <input
                         id="searchbar"
-                        // className="labels"
                         autoComplete="off"
                         style={{ margin: 0 }}
                         onChange={(e) => {
@@ -157,7 +136,6 @@ export default function Services(props) {
                         }}
                         value={inputValue}
                         onKeyDown={(e) => {
-                            console.log("e.key: ", e.key);
                             if (e.key === "Escape") {
                                 setSearchClass("searchHidden");
                             } else if (e.key === "Enter") {
@@ -400,25 +378,7 @@ export default function Services(props) {
                                                 </span>
                                             )}
                                         </div>
-                                        {/* <div>
-                                <p> {name},</p>
-                                <p> {type},</p>
-                                <p> {address},</p>
-                                <p> {email},</p>
-                                {phone},<p> {url},</p>
-                                <p> {description},</p>
-                                <p> {smallbio},</p>
-                                <p> {schedule},</p>
-                                <p> {insurance},</p>
-                                <p> {english},</p>
-                                <p> {queerFriendly},</p>
-                                <p> {urgent},</p>
-                                <p> {urgentTime},</p>
-                                <p> {price},</p>
-                                <p> {pricetable},</p>
-                                <p> {specialty},</p>
-                                <p> {notes},</p>
-                            </div> */}
+                                       
                                     </div>
                                 );
                             }
@@ -458,16 +418,7 @@ export default function Services(props) {
                                     <Marker
                                         key={index}
                                         position={[lat, long]}
-                                        // icon={
-                                        //     new Icon({
-                                        //         iconSize: [20, 40],
-                                        //         iconAnchor: [10, 20],
-                                        //         // popupAnchor: [2, -40],
-                                        //         iconUrl:
-                                        //             "http://simpleicon.com/wp-content/uploads/unsure_emotion.svg",
-                                        //         shadowUrl: null,
-                                        //     })
-                                        // }
+                                    
                                     >
                                         <Popup>
                                             <div className="popup">

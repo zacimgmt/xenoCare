@@ -14,7 +14,6 @@ export default function App() {
     let appDiv = "normal";
 
     const changeBackgroundOnLanding = () => {
-        console.log("hi!!");
         appDiv = "backgroundLanding";
     };
 
@@ -22,9 +21,6 @@ export default function App() {
         i18n.changeLanguage(ln);
     };
 
-    useEffect(() => {
-        console.log("appDiv: ", appDiv);
-    }, [appDiv]);
 
     return (
         <BrowserRouter>

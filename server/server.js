@@ -9,12 +9,6 @@ const db = require("./db");
 app.use(compression());
 app.use(express.json());
 
-// app.use(csurf());
-
-// app.use(function (req, res, next) {
-//     res.cookie("mytoken", req.csrfToken());
-//     next();
-// });
 
 const auth = function (req, res, next) {
     const creds = basicAuth(req);
@@ -31,9 +25,9 @@ const auth = function (req, res, next) {
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV == "production") {
     app.use((req, res, next) => {
-        if (req.headers['x-forwarded-proto'].startsWith('https')) {
+        if (req.headers["x-forwarded-proto"].startsWith("https")) {
             return next();
         }
         res.redirect(`https://${req.hostname}${req.url}`);
@@ -45,7 +39,6 @@ app.get("/test", auth, (req, res) => {
 });
 
 app.post("/healthTool", async (req, res) => {
-    console.log("req.body: ", req.body);
     if (req.body.inputHealth) {
         const {
             name = "",
@@ -93,7 +86,6 @@ app.post("/healthTool", async (req, res) => {
         console.log("result: ", result);
         res.json(true);
     } else if (req.body.inputServices) {
-        console.log("req.body: ", req.body);
         const {
             name = "",
             type = "",
@@ -135,20 +127,6 @@ app.post("/healthTool", async (req, res) => {
         res.json(true);
     }
 
-    {
-        // console.log('name: ', name)
-        // console.log('email: ', email)
-        // console.log('type: ', type)
-        // console.log('address: ', address)
-        // console.log('phone: ', phone)
-        // console.log('url: ', url)
-        // console.log('description ',description)
-        // console.log('insurance: ', insurance)
-        // console.log('english: ', english)
-        // console.log('queerFriendly: ', queerFriendly)
-        // console.log('urgent: ', urgent)
-        // console.log('specialty: ', specialty)}
-    }
 });
 
 app.get("/prohealth", async (req, res) => {
@@ -285,7 +263,7 @@ app.get("/prohealth", async (req, res) => {
             console.log("err: ", err);
             res.json(err);
         });
-        // console.log("result: ", result);
+      
     });
 });
 
@@ -318,7 +296,7 @@ app.get("/proservices", async (req, res) => {
             console.log("err: ", err);
             res.json(err);
         });
-        // console.log("result: ", result);
+     
     });
 });
 
@@ -326,9 +304,9 @@ app.get("/allnames.json", async (req, res) => {
     const { rows: services } = await db.getAllServicesNames();
     const { rows: health } = await db.getAllHealthNames();
     const rawNames = [...services, ...health];
-    console.log('rawNames: ', rawNames)
+   
     const allNames = rawNames.map(({ name }) => name);
-    console.log("allNames: ", allNames);
+
     res.json(allNames);
 });
 
@@ -336,19 +314,16 @@ app.get("/services.json", async (req, res) => {
     let { rows } = await db.getAllHealth();
     let { rows: servicesRows } = await db.getAllServices();
     const allResults = [...rows, ...servicesRows];
-    console.log("allResults: ", allResults);
     res.json({ allResults });
 });
 
 app.post("/searchServices", async (req, res) => {
-    console.log("req.body: ", req.body);
     const { inputValue, quality, languages, searchMode } = req.body;
 
     if (!inputValue && !quality.length && !languages.length) {
         let { rows } = await db.getAllHealth();
         let { rows: servicesRows } = await db.getAllServices();
         const allResults = [...rows, ...servicesRows];
-        // console.log("allResults: ", allResults);
         return res.json(allResults);
     }
 
@@ -373,7 +348,6 @@ app.post("/searchServices", async (req, res) => {
 
         return updatedAcum;
     }, "(");
-    console.log("langQuery: ", langQuery);
     const qualityQuery = quality.reduce((accumulator, tag, index) => {
         let updatedAcum = accumulator + ` ${tag} ILIKE 'TRUE'`;
         // params.push(tag);
@@ -385,68 +359,60 @@ app.post("/searchServices", async (req, res) => {
 
         return updatedAcum;
     }, "(");
-    console.log("qualityQuery: ", qualityQuery);
-    console.log("params: ", params);
 
     let whereClause;
     if (inputValue) {
         if (quality.length && languages.length) {
             whereClause = `WHERE ${inputQuery} AND ${qualityQuery} AND ${langQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         } else if (quality.length) {
             whereClause = `WHERE ${inputQuery} AND ${qualityQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         } else if (languages.length) {
             whereClause = `WHERE ${inputQuery} AND ${langQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         } else {
             whereClause = `WHERE ${inputQuery}`;
         }
     } else {
         if (quality.length && languages.length) {
             whereClause = `WHERE ${qualityQuery} AND ${langQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         } else if (quality.length) {
             whereClause = `WHERE ${qualityQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         } else if (languages.length) {
-            console.log("languages");
             whereClause = `WHERE ${langQuery};`;
-            console.log("whereClause: ", whereClause);
+          
         }
     }
 
-    console.log("whereClause: ", whereClause);
-    console.log("params: ", params);
+    
 
-    // try{
+    
 
     const { rows: health } = await db.searchHealthFilter(whereClause, params);
     const { rows: services } = await db.searchServicesFilter(
         whereClause,
         params
     );
-    // }
-    // catch  (err) {
-    //     console.log('err: ', err)
-
-    // }
+ 
     const allResults = [...health, ...services];
-    // console.log("allResults: ", allResults);
+  
     res.json(allResults);
 });
 
 app.get("/servProfile/:type/:id", async (req, res) => {
     const { type, id } = req.params;
     if (type === "h") {
-        console.log("type: ", type);
+        
         let { rows } = await db.getHealthById(id);
-        console.log("rows getHealthById: ", rows);
+      
         return res.json(rows);
     } else {
-        console.log("type in server: ", type);
+     
         let { rows } = await db.getServiceById(id);
-        console.log("rows getHealthById: ", rows);
+     
         return res.json(rows);
     }
 });
@@ -454,7 +420,6 @@ app.get("/servProfile/:type/:id", async (req, res) => {
 
 app.get("/lang", async (req, res) => {
     const { rows } = await db.testing();
-    console.log("rows: ", rows);
     res.json(rows);
 });
 

@@ -36,12 +36,6 @@ export default function HealthTool() {
         });
     };
 
-    const cleaninput = () => {
-        console.log(
-            " document.getElementsByTagName(input).value;: ",
-            document.getElementsByTagName("input").value
-        );
-    };
 
     const handleSubmitHealth = async () => {
         const { data } = await axios.post("/healthTool", { inputHealth });
