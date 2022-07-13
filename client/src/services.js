@@ -18,15 +18,13 @@ export default function Services(props) {
     const [modeText, setModeText] = useState("Map Mode");
 
     const berlinPosition = [52.520008, 13.404954];
-    console.log("@@@@@ rendering @@@@");
-    console.log("inputValue: ", inputValue);
-
+   
     useEffect(async () => {
         const { data } = await axios.get("/services.json");
-        console.log("data: ", data);
+      
         setServices(data.allResults);
         const { data: allNames } = await axios.get("/allnames.json");
-        console.log("allNames: ", allNames);
+
         setallNames(allNames);
     }, [props.location.hash]);
 

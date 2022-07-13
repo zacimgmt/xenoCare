@@ -215,7 +215,6 @@ exports.searchHealthFilter = (whereClause, params) => {
 };
 
 exports.searchServicesFilter = (whereClause, params) => {
-    // console.log('params: ', params)
     return db.query(`SELECT * FROM services ${whereClause}`, params);
 };
 
