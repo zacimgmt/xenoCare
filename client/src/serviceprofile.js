@@ -6,14 +6,6 @@ import Leaflet from "leaflet";
 import { Icon } from "leaflet";
 import { Link } from "react-router-dom";
 
-// const icon = new Icon({
-//     iconSize: [20, 40],
-//     iconAnchor: null,
-//     popupAnchor: [2, -40],
-//     iconUrl: "http://simpleicon.com/wp-content/uploads/unsure_emotion.svg",
-//     shadowUrl: null,
-// });
-// Leaflet.Marker.prototype.options.icon = icon;
 
 export default function serviceProfile(props) {
     const [service, setService] = useState();
